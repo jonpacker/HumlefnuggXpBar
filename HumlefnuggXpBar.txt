@@ -1,0 +1,5 @@
+## Title: HumlefnuggXpBar
+## APIVersion: 100003
+
+HumlefnuggXpBar.lua
+HumlefnuggXpBar.xml
