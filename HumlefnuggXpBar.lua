@@ -16,13 +16,12 @@ function HFXB.init(eventCode, addOnName)
       function() return HFXB.vars.width end,
       function(val) HFXB.vars.width = val; HFXB.updateSettings() end)
 
-  HFXB.gain()
-
   for i = 1, 20 do 
     local bubble = CreateControlFromVirtual("HFXBBubble", HFXBFrame, "HFXBBubble", i)
   end
 
   HFXB.updateSettings()
+  HFXB.gain()
 end
 
 function HFXB.updateSettings()
