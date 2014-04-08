@@ -1,5 +1,6 @@
 ## Title: HumlefnuggXpBar
 ## APIVersion: 100003
+## SavedVariables: HFXBSettings
 
 HumlefnuggXpBar.lua
 HumlefnuggXpBar.xml
