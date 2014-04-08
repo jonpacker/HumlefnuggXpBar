@@ -1,9 +1,15 @@
 HFXB = {}
 
 function HFXB.init(eventCode, addOnName)
+  if addOnName ~= "HumlefnuggXpBar" then return end
   local xp = GetUnitXP("player")
   local levelXp = GetUnitXPMax("player")
   HFXBFramebar:SetDimensions(HFXBFrame:GetWidth() * (xp / levelXp), HFXBFrame:GetHeight())
+
+  for i = 1, 20 do 
+    local bubble = CreateControlFromVirtual("HFXBBubble", HFXBFrame, "HFXBBubble", i)
+    bubble:SetSimpleAnchorParent((i - 1) * 75, 0)
+  end
 end
 
 function HFXB.update()

@@ -1,5 +1,9 @@
 <GuiXml>
   <Controls>
+    <Backdrop edgeColor="000000" virtual="true" name="HFXBBubble" alpha="0.2">
+      <Dimensions x="75" y="15"/>
+      <Edge edgeSize="2"/>
+    </Backdrop>
     <TopLevelControl name="HFXBFrame" mouseEnabled="true" movable="true" alpha="0.8" clampedToScreen="true">
       <Dimensions x="1500" y="15"/>
       <Anchor point="CENTER"/>
