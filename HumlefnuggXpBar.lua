@@ -1,20 +1,41 @@
 HFXB = {}
-HFXB.defaults = {}
+HFXB.defaults = {
+  width = 1500,
+}
+
+local LAM = LibStub:GetLibrary("LibAddonMenu-1.0")
 
 function HFXB.init(eventCode, addOnName)
   if addOnName ~= "HumlefnuggXpBar" then return end
 
   HFXB.vars = ZO_SavedVars:New("HFXBSettings", 2, nil, HFXB.defaults)
 
-  if HFXB.vars.offsetX ~= nil and HFXB.vars.offsetY ~= nil then
-    HFXBFrame:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, HFXB.vars.offsetX, HFXB.vars.offsetY)
-  end
+  -- config menu
+  panel = LAM:CreateControlPanel("HFXBConfig", "Humlefnugg XP")
+  LAM:AddSlider(panel, "HFXB.width", "Width", "Width of the bar", 400, 2000, 1,
+      function() return HFXB.vars.width end,
+      function(val) HFXB.vars.width = val; HFXB.updateSettings() end)
 
   HFXB.gain()
 
   for i = 1, 20 do 
     local bubble = CreateControlFromVirtual("HFXBBubble", HFXBFrame, "HFXBBubble", i)
-    bubble:SetSimpleAnchorParent((i - 1) * 75, 0)
+  end
+
+  HFXB.updateSettings()
+end
+
+function HFXB.updateSettings()
+  if HFXB.vars.offsetX ~= nil and HFXB.vars.offsetY ~= nil then
+    HFXBFrame:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, HFXB.vars.offsetX, HFXB.vars.offsetY)
+  end
+
+  HFXBFrame:SetWidth(HFXB.vars.width)
+
+  for i = 1, 20 do
+    local bubble = _G["HFXBBubble"..i]
+    bubble:SetWidth(HFXB.vars.width / 20)
+    bubble:SetSimpleAnchorParent((i - 1) * (HFXB.vars.width / 20), 0)
   end
 end
 

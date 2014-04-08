@@ -1,6 +1,10 @@
 ## Title: HumlefnuggXpBar
 ## APIVersion: 100003
+## OptionalDependsOn: LibAddonMenu-1.0, LibStub
 ## SavedVariables: HFXBSettings
+
+Libs/LibStub/LibStub.lua
+Libs/LibAddonMenu-1.0/LibAddonMenu-1.0.lua
 
 HumlefnuggXpBar.lua
 HumlefnuggXpBar.xml
