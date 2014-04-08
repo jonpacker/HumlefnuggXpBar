@@ -19,9 +19,6 @@
       <OnMoveStop>
         HFXB.saveFramePosition()
       </OnMoveStop>
-      <OnUpdate>
-        HFXB.update()
-      </OnUpdate>
     </TopLevelControl>
   </Controls>
 </GuiXml>

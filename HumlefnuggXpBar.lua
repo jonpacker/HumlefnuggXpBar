@@ -23,10 +23,6 @@ function HFXB.saveFramePosition()
   HFXB.vars.offsetY = HFXBFrame:GetTop()
 end
 
-function HFXB.update()
-
-end
-
 function HFXB.gain()
   local xp = GetUnitXP("player")
   local levelXp = GetUnitXPMax("player")
