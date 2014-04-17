@@ -3,6 +3,9 @@ HFXB.defaults = {
   width = 1500,
 }
 
+HFXB.xpColour = { 0.31, 0.05, 0.51, 1 };
+HFXB.vpColour = { 0.48, 0.69, 0.55, 1 };
+
 local LAM = LibStub:GetLibrary("LibAddonMenu-1.0")
 
 function HFXB.init(eventCode, addOnName)
@@ -51,8 +54,13 @@ function HFXB.getMaxXp()
   return IsUnitVeteran('player') and GetUnitVeteranPointsMax('player') or GetUnitXPMax('player')
 end
 
+function HFXB.getBarColour()
+  return IsUnitVeteran('player') and HFXB.vpColour or HFXB.xpColour
+end
+
 function HFXB.gain(current, max)
   HFXBFramebar:SetDimensions(HFXBFrame:GetWidth() * (HFXB.getCurrentXp() / HFXB.getMaxXp()), HFXBFrame:GetHeight())
+  HFXBFramebar:SetColor(unpack(HFXB.getBarColour()))
 end
 
 EVENT_MANAGER:RegisterForEvent("HFXB", EVENT_ADD_ON_LOADED, HFXB.init)
