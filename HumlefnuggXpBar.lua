@@ -43,11 +43,18 @@ function HFXB.saveFramePosition()
   HFXB.vars.offsetY = HFXBFrame:GetTop()
 end
 
-function HFXB.gain()
-  local xp = GetUnitXP("player")
-  local levelXp = GetUnitXPMax("player")
-  HFXBFramebar:SetDimensions(HFXBFrame:GetWidth() * (xp / levelXp), HFXBFrame:GetHeight())
+function HFXB.getCurrentXp()
+  return IsUnitVeteran('player') and GetUnitVeteranPoints('player') or GetUnitXP('player')
+end
+
+function HFXB.getMaxXp()
+  return IsUnitVeteran('player') and GetUnitVeteranPointsMax('player') or GetUnitXPMax('player')
+end
+
+function HFXB.gain(current, max)
+  HFXBFramebar:SetDimensions(HFXBFrame:GetWidth() * (HFXB.getCurrentXp() / HFXB.getMaxXp()), HFXBFrame:GetHeight())
 end
 
 EVENT_MANAGER:RegisterForEvent("HFXB", EVENT_ADD_ON_LOADED, HFXB.init)
 EVENT_MANAGER:RegisterForEvent("HFXB", EVENT_EXPERIENCE_UPDATE, HFXB.gain)
+EVENT_MANAGER:RegisterForEvent("HFXB", EVENT_VETERAN_POINTS_UPDATE, HFXB.gain)
