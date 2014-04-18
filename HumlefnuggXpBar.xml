@@ -8,6 +8,10 @@
       <Dimensions x="1500" y="15"/>
       <Anchor point="TOPLEFT" offsetX="200" offsetY="200"/>
       <Controls>
+        <Texture name="$(parent)gain" color="FFFFFF" alpha="1">
+          <Dimensions x="0" y="15"/>
+          <Anchor point="LEFT"/>
+        </Texture>
         <Texture name="$(parent)bar" color="4E0D83">
           <Dimensions x="0" y="15"/>
           <Anchor point="LEFT"/>

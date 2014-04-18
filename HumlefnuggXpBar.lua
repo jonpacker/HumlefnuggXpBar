@@ -5,6 +5,7 @@ HFXB.defaults = {
 
 HFXB.xpColour = { 0.31, 0.05, 0.51, 1 };
 HFXB.vpColour = { 0.48, 0.69, 0.55, 1 };
+HFXB.currentXp = 0;
 
 local LAM = LibStub:GetLibrary("LibAddonMenu-1.0")
 
@@ -12,6 +13,7 @@ function HFXB.init(eventCode, addOnName)
   if addOnName ~= "HumlefnuggXpBar" then return end
 
   HFXB.vars = ZO_SavedVars:New("HFXBSettings", 2, nil, HFXB.defaults)
+  HFXB.setupGainAnimationTimeline()
 
   -- config menu
   panel = LAM:CreateControlPanel("HFXBConfig", "Humlefnugg XP")
@@ -25,6 +27,15 @@ function HFXB.init(eventCode, addOnName)
 
   HFXB.updateSettings()
   HFXB.gain()
+end
+
+function HFXB.setupGainAnimationTimeline()
+  local timeline = ANIMATION_MANAGER:CreateTimeline()
+  local anim = timeline:InsertAnimation(ANIMATION_ALPHA, HFXBFramegain, 0)
+  anim:SetDuration(10000)
+  anim:SetEasingFunction(ZO_BezierInEase)
+  anim:SetAlphaValues(1, 0)
+  HFXB.gainAnimation = timeline
 end
 
 function HFXB.updateSettings()
@@ -58,9 +69,32 @@ function HFXB.getBarColour()
   return IsUnitVeteran('player') and HFXB.vpColour or HFXB.xpColour
 end
 
+function HFXB.displayGainAnimation(from, to)
+
+end
+
 function HFXB.gain(current, max)
-  HFXBFramebar:SetDimensions(HFXBFrame:GetWidth() * (HFXB.getCurrentXp() / HFXB.getMaxXp()), HFXBFrame:GetHeight())
+  local newXp = HFXB.getCurrentXp() / HFXB.getMaxXp()
+
+  HFXBFramebar:SetDimensions(HFXBFrame:GetWidth() * newXp, HFXBFrame:GetHeight())
   HFXBFramebar:SetColor(unpack(HFXB.getBarColour()))
+
+  if newXp > HFXB.currentXp then
+    local gainWidth = HFXBFrame:GetWidth() * (newXp - HFXB.currentXp)
+    local offset = HFXBFrame:GetWidth() * HFXB.currentXp
+    if gainWidth < 1 then 
+      gainWidth = 1
+      offset = offset - 1
+    end
+    HFXBFramegain:SetDimensions(gainWidth, HFXBFrame:GetHeight())
+    HFXBFramegain:SetSimpleAnchorParent(offset, 0)
+    if HFXB.gainAnimation ~= nil then
+      HFXB.gainAnimation:Stop()
+      HFXB.gainAnimation:PlayFromStart()
+    end
+  end
+
+  HFXB.currentXp = newXp
 end
 
 EVENT_MANAGER:RegisterForEvent("HFXB", EVENT_ADD_ON_LOADED, HFXB.init)
