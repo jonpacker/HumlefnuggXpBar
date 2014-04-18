@@ -8,6 +8,9 @@
       <Dimensions x="1500" y="15"/>
       <Anchor point="TOPLEFT" offsetX="200" offsetY="200"/>
       <Controls>
+        <Label name="$(parent)text" color="FFFFFF" wrapMode="ELLIPSIS" verticalAlignment="CENTER" horizontalAlignment="CENTER" text="" hidden="true">
+          <AnchorFill />
+        </Label>
         <Texture name="$(parent)gain" color="FFFFFF" alpha="1">
           <Dimensions x="0" y="15"/>
           <Anchor point="LEFT"/>
@@ -23,6 +26,12 @@
       <OnMoveStop>
         HFXB.saveFramePosition()
       </OnMoveStop>
+      <OnMouseEnter>
+        HFXB.showStatText()
+      </OnMouseEnter>
+      <OnMouseExit>
+        HFXB.hideStatText()
+      </OnMouseExit>
     </TopLevelControl>
   </Controls>
 </GuiXml>

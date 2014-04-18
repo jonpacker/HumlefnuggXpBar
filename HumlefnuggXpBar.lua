@@ -14,6 +14,7 @@ function HFXB.init(eventCode, addOnName)
 
   HFXB.vars = ZO_SavedVars:New("HFXBSettings", 2, nil, HFXB.defaults)
   HFXB.setupGainAnimationTimeline()
+  HFXBFrametext:SetFont("EsoUI/Common/Fonts/univers57.otf|14|soft-shadow-thick")
 
   -- config menu
   panel = LAM:CreateControlPanel("HFXBConfig", "Humlefnugg XP")
@@ -57,6 +58,14 @@ function HFXB.saveFramePosition()
   HFXB.vars.offsetY = HFXBFrame:GetTop()
 end
 
+function HFXB.showStatText()
+  HFXBFrametext:SetHidden(false)
+end
+
+function HFXB.hideStatText()
+  HFXBFrametext:SetHidden(true)
+end
+
 function HFXB.getCurrentXp()
   return IsUnitVeteran('player') and GetUnitVeteranPoints('player') or GetUnitXP('player')
 end
@@ -78,6 +87,7 @@ function HFXB.gain(current, max)
 
   HFXBFramebar:SetDimensions(HFXBFrame:GetWidth() * newXp, HFXBFrame:GetHeight())
   HFXBFramebar:SetColor(unpack(HFXB.getBarColour()))
+  HFXBFrametext:SetText(string.format("%d/%d (%d%%)", HFXB.getCurrentXp(), HFXB.getMaxXp(), newXp * 100))
 
   if newXp > HFXB.currentXp then
     local gainWidth = HFXBFrame:GetWidth() * (newXp - HFXB.currentXp)
