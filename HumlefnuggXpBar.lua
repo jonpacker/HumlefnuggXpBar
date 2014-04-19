@@ -13,8 +13,9 @@ function HFXB.init(eventCode, addOnName)
   if addOnName ~= "HumlefnuggXpBar" then return end
 
   HFXB.vars = ZO_SavedVars:New("HFXBSettings", 2, nil, HFXB.defaults)
-  HFXB.setupGainAnimationTimeline()
-  HFXBFrametext:SetFont("EsoUI/Common/Fonts/univers57.otf|14|soft-shadow-thick")
+  HFXB.setupAnimationTimelines()
+  HFXBFrametext:SetFont("EsoUI/Common/Fonts/univers55.otf|12|soft-shadow-thick")
+  HFXBFramegainText:SetFont("EsoUI/Common/Fonts/univers55.otf|12|soft-shadow-thick")
 
   -- config menu
   panel = LAM:CreateControlPanel("HFXBConfig", "Humlefnugg XP")
@@ -30,10 +31,24 @@ function HFXB.init(eventCode, addOnName)
   HFXB.gain()
 end
 
+function HFXB.setupAnimationTimelines()
+  HFXB.setupGainTextAnimationTimeline()
+  HFXB.setupGainAnimationTimeline()
+end
+
+function HFXB.setupGainTextAnimationTimeline()
+  local timeline = ANIMATION_MANAGER:CreateTimeline()
+  local anim = timeline:InsertAnimation(ANIMATION_ALPHA, HFXBFramegainText, 5000)
+  anim:SetDuration(5000)
+  anim:SetEasingFunction(ZO_BezierInEase)
+  anim:SetAlphaValues(1, 0)
+  HFXB.gainTextAnimation = timeline
+end
+
 function HFXB.setupGainAnimationTimeline()
   local timeline = ANIMATION_MANAGER:CreateTimeline()
-  local anim = timeline:InsertAnimation(ANIMATION_ALPHA, HFXBFramegain, 0)
-  anim:SetDuration(10000)
+  local anim = timeline:InsertAnimation(ANIMATION_ALPHA, HFXBFramegain, 5000)
+  anim:SetDuration(5000)
   anim:SetEasingFunction(ZO_BezierInEase)
   anim:SetAlphaValues(1, 0)
   HFXB.gainAnimation = timeline
@@ -59,6 +74,8 @@ function HFXB.saveFramePosition()
 end
 
 function HFXB.showStatText()
+  HFXB.gainTextAnimation:Stop()
+  HFXBFramegainText:SetAlpha(0)
   HFXBFrametext:SetHidden(false)
 end
 
@@ -78,10 +95,6 @@ function HFXB.getBarColour()
   return IsUnitVeteran('player') and HFXB.vpColour or HFXB.xpColour
 end
 
-function HFXB.displayGainAnimation(from, to)
-
-end
-
 function HFXB.gain(current, max)
   local newXp = HFXB.getCurrentXp() / HFXB.getMaxXp()
 
@@ -89,8 +102,9 @@ function HFXB.gain(current, max)
   HFXBFramebar:SetColor(unpack(HFXB.getBarColour()))
   HFXBFrametext:SetText(string.format("%d/%d (%d%%)", HFXB.getCurrentXp(), HFXB.getMaxXp(), newXp * 100))
 
-  if newXp > HFXB.currentXp then
-    local gainWidth = HFXBFrame:GetWidth() * (newXp - HFXB.currentXp)
+  if newXp > HFXB.currentXp and HFXB.gainAnimation ~= nil then
+    local xpDiff = newXp - HFXB.currentXp
+    local gainWidth = HFXBFrame:GetWidth() * xpDiff
     local offset = HFXBFrame:GetWidth() * HFXB.currentXp
     if gainWidth < 1 then 
       gainWidth = 1
@@ -98,10 +112,16 @@ function HFXB.gain(current, max)
     end
     HFXBFramegain:SetDimensions(gainWidth, HFXBFrame:GetHeight())
     HFXBFramegain:SetSimpleAnchorParent(offset, 0)
-    if HFXB.gainAnimation ~= nil then
-      HFXB.gainAnimation:Stop()
-      HFXB.gainAnimation:PlayFromStart()
-    end
+
+    local format = xpDiff > 0.01 and "+%d (%d%%)" or "+%d (%.2f%%)"
+    HFXBFramegainText:SetText(string.format(format, HFXB.getMaxXp() * xpDiff, xpDiff * 100))
+
+    HFXBFramegain:SetAlpha(1)
+    HFXBFramegainText:SetAlpha(1)
+    HFXB.gainAnimation:Stop()
+    HFXB.gainTextAnimation:Stop()
+    HFXB.gainAnimation:PlayFromStart()
+    HFXB.gainTextAnimation:PlayFromStart()
   end
 
   HFXB.currentXp = newXp

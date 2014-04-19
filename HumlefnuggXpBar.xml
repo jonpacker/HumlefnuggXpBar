@@ -8,6 +8,9 @@
       <Dimensions x="1500" y="15"/>
       <Anchor point="TOPLEFT" offsetX="200" offsetY="200"/>
       <Controls>
+        <Label name="$(parent)gainText" color="FFFFFF" wrapMode="ELLIPSIS" verticalAlignment="CENTER" horizontalAlignment="CENTER" text="">
+          <AnchorFill />
+        </Label>
         <Label name="$(parent)text" color="FFFFFF" wrapMode="ELLIPSIS" verticalAlignment="CENTER" horizontalAlignment="CENTER" text="" hidden="true">
           <AnchorFill />
         </Label>
